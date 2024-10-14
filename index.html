@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sustainability Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#suggestions">Suggestions</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="heading" id="head">
+            <h1>Sustainability Tracker</h1>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-text">
+            <h2>Track your carbon footprint</h2>
+            <p>Monitor, manage, and reduce your emissions for a sustainable future.</p>
+            <button onclick="location.href='#dashboard'">Get Started</button>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="dashboard-section">
+        <h2>Your Dashboard</h2>
+        <div class="dashboard-options">
+            <a href="#weekly-report">View Weekly Emissions Report</a>
+            <a href="#progress">Carbon Emissions Progress</a>
+            <a href="#profile">Profile Management</a>
+            <a href="#tracker">Link to Habit Tracker</a>
+            <a href="#logout">Log Out</a>
+        </div>
+    </section>
+
+    <!-- Data Entry and Chart Section -->
+    <section class="data-section">
+        <h2>Input Your Data</h2>
+        <form id="carbon-footprint-form">
+            <!-- Date Entry -->
+            <div id="date-section">
+                <h3>Enter Date</h3>
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+                <button type="button" id="next-to-car">Next</button>
+            </div>
+
+            <!-- Car Emissions Section -->
+<!-- Car Emissions Section -->
+<div id="car-section" style="display:none;">
+    <h3>Car Emissions</h3>
+    <label for="car-distance">Distance Driven (miles):</label>
+    <input type="number" id="car-distance" name="car-distance" required>
+
+    <label for="fuel-efficiency">Fuel Efficiency (mpg):</label>
+    <input type="number" id="fuel-efficiency" name="fuel-efficiency" required>
+
+    <label for="car-type">Car Type:</label>
+    <select id="car-type" name="car-type" required>
+        <option value="electric">Electric</option>
+        <option value="gasoline">Gasoline</option>
+    
+            <option value="diesel">Diesel</option>
+        
+    </select>
+    <button type="button" id="next-to-diet">Next</button>
+</div>
+
+
+            <!-- Diet Section -->
+            <div id="diet-section" style="display:none;">
+                <h3>Diet</h3>
+                
+                <label for="diet">Fruit:</label>
+                <select id="diet" name="diet" required>
+                    <option value="apple">Apple</option>
+                    <option value="banana">Banana</option>
+                    <option value="orange">Orange</option>
+                  
+                </select>
+                <label for="fruit-amount">Fruit Amount:</label>
+                <input type="number" id="fruit-amount" name="fruit-amount" required>
+                <button type="button" id="add-fruit">Add another fruit</button>
+
+
+
+                <label for="protein">Protein:</label>
+                <select id="protein" name="protein" required>
+                    <option value="beef">Beef</option>
+                    <option value="poultry">Poultry</option>
+                    <option value="fish">Fish</option>
+                    <option value="pork">Pork</option>
+              
+                </select>
+                <label for="protein-weight">Protein Weight (kg):</label>
+                <input type="number" id="protein-weight" name="protein-weight" required>
+
+                <button type="button" id="add-protein">Add another protein</button>
+            
+                <label for="grains">Grains:</label>
+                <select id="grains" name="grains" required>
+                    <option value="rice">Rice</option>
+                    <option value="oats">Oats</option>
+                </select>
+                <label for="grains-weight">Grains Weight (kg):</label>
+                <input type="number" id="grains-weight" name="grains-weight" required>
+
+                <button type="button" id="add-grain">Add another grain</button>
+            
+                <label for="dairy">Dairy:</label>
+                <select id="dairy" name="dairy" required>
+                    <option value="milk">Milk</option>
+                    <option value="yogurt">Yogurt</option>
+                    <option value="cheese">Cheese</option>
+                </select>
+                <label for="dairy-weight">Dairy Weight (kg):</label> <!-- Move this label outside of the <option> -->
+                <input type="number" id="dairy-weight" name="dairy-weight" required>
+                <button type="button" id="add-dairy">Add another dair</button>
+
+
+                <button type="button" id="next-to-energy">Next</button>
+            </div>
+
+            <!-- Energy Section -->
+            <div id="energy-section" style="display:none;">
+                <h3>Energy Use</h3>
+                <label for="energy">Electricity Usage (kWh):</label>
+                <input type="number" id="energy" name="energy" required>
+                <button type="submit" id="submit-form">Submit</button>
+            </div>
+        </form>
+
+        <!-- Results Section -->
+        <div id="result" style="display:none;">
+            <h3>Your Carbon Footprint</h3>
+            <h4>Date: <span id="result-date"></span></h4>
+            <p>Car Emissions: <span id="result-car"></span> kg CO2</p>
+            <p>Diet Emissions: <span id="result-diet"></span> kg CO2</p>
+            <p>Energy Emissions: <span id="result-energy"></span> kg CO2</p>
+            <h4>Total Emissions: <span id="result-total"></span> kg CO2</h4>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-section">
+            <h3>Generated Emission Charts</h3>
+            <p>Your emissions are compared with the ideal values</p>
+        </div>
+    </section>
+
+    <!-- Personalized Suggestions -->
+    <section id="suggestions" class="suggestions-section">
+
+        <div class="suggestions">
+            <div class="lifestyle">
+                <h3>Lifestyle Tips</h3>
+                <ul>
+                    <li>Minimize energy consumption</li>
+                    <li>Use public transport instead of driving</li>
+                    <li>Reduce food waste</li>
+                </ul>
+            </div>
+            <div class="resources">
+                <h3>Useful Resources</h3>
+                <ul>
+                    <li>How to go zero-waste</li>
+                    <li>Eco-friendly product guides</li>
+                    <li>Environmental websites and blogs</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Sustainability Tracker. All Rights Reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
