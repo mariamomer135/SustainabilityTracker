@@ -1,459 +1,148 @@
-/* General Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"poppins",sans-serif;
 }
-
-body {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-
-  background-image: url("highq.jpg");
-
-  cursor: url('8c0e6daa85768b9039f34e4cbbdea606.png'), default;
- 
-}
-
-
-
-nav {
- 
-  background-color: #97b87d;
-  padding: 15px;
-  border-radius: 10px; 
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-  position: fixed; 
-  top: 0;
-  left: 0;
-  width: 100%; 
-  z-index: 1000; 
+body{
+  background-image: url(highq.jpg);
 
 }
-
-
-nav ul {
-  list-style-type: none; 
-  margin: 0;
-  padding: 0;
-  text-align: center; 
+.container{
+  background:#fff;
+  width:450px;
+  padding:1.5rem;
+  margin:50px auto;
+  border-radius:10px;
+  box-shadow:0 20px 35px rgba(0,0,1,0.9);
 }
-
-nav ul li {
-  display: inline; 
-  margin: 0 15px; 
+form{
+  margin:0 2rem;
 }
-
-nav ul li a {
-  text-decoration: none; 
-  font-size: 15px;
-  font-family: 'Arial', sans-serif;
-  color: white; 
-  font-weight: bold;
-  padding: 10px 20px;
-  border-radius: 5px; 
-  transition: background-color 0.3s ease, color 0.3s ease; 
+.form-title{
+  font-size:1.5rem;
+  font-weight:bold;
+  text-align:center;
+  padding:1.3rem;
+  margin-bottom:0.4rem;
 }
-
-nav ul li a:hover {
-  background-color: #31681b; 
-  color: white; 
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
+input{
+  color:inherit;
+  width:100%;
+  background-color:transparent;
+  border:none;
+  border-bottom:1px solid #757575;
+  padding-left:1.5rem;
+  font-size:15px;
 }
-
-nav ul li a:active {
-  background-color: #31681b; 
-  color: white;
-}
-
-
-
-
-
-
-
-
-h1, h2, h3, h4 {
-  color: rgb(255, 255, 255);
-}
-
-h1{
-  margin-top: 100px;
-font-size: 75px;
-text-shadow: 5px 5px 10px rgba(37, 3, 53, 0.435);
+.input-group{
+  padding:1% 0;
+  position:relative;
 
 }
-.heading{
-  text-align: center;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://www.greenpeace.org/static/planet4-international-stateless/2020/03/9c0da5b7-forest_conservation.jpg');
-  color: white;
-  padding: 50px 0;
-  text-align: center;
+.input-group i{
+  position:absolute;
+  color:black;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Hero Section */
-.hero {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://www.greenpeace.org/static/planet4-international-stateless/2020/03/9c0da5b7-forest_conservation.jpg');
-  background-size: cover;
-  background-position: center;
-  padding: 80px 0;
-  color: white;
-  text-align: center;
+input:focus{
+  background-color: transparent;
+  outline:transparent;
+  border-bottom:2px solid hsl(327,90%,28%);
 }
-
-.hero-text {
-  max-width: 600px;
-  margin: 0 auto;
+input::placeholder{
+  color:transparent;
 }
-
-.hero-text h2 {
-  font-size: 48px;
-  margin-bottom: 20px;
+label{
+  color:#757575;
+  position:relative;
+  left:1.2em;
+  top:-1.3em;
+  cursor:auto;
+  transition:0.3s ease all;
 }
-
-.hero-text p {
-  font-size: 18px;
-  margin-bottom: 30px;
+input:focus~label,input:not(:placeholder-shown)~label{
+  top:-3em;
+  color:hsl(327,90%,28%);
+  font-size:15px;
 }
-
-.hero-text button {
-  background-color: #f7b267;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  font-size: 18px;
-  cursor: pointer;
-  border-radius: 8px;
-}
-
-.hero-text button:hover {
-  background-color: #ff9e5c;
-}
-
-/* Dashboard Section */
-.dashboard-section {
-  padding: 60px 20px;
-  text-align: center;
-  background-color: #ffffff;
-  
-}
-
-.dashboard-section h2 {
-  font-size: 36px;
-  margin-bottom: 30px;
-  color: #333;
-}
-
-.dashboard-options a {
-  display: inline-block;
-  margin: 10px;
-  padding: 15px 30px;
-  background-color: #97b87d;
-  color: white;
-  border-radius: 8px;
-  text-decoration: none;
-  font-size: 18px;
-}
-
-.dashboard-options a:hover {
-  background-color: #1e5137;
-}
-/* Data Section */
-.data-section {
-  padding: 40px 20px;
-  background-color: white;
-  text-align: center;
-  border-radius: 12px;
-  margin: 40px auto;
-  max-width: 600px;
-}
-
-.data-section h2 {
-  font-size: 28px;
-  margin-bottom: 20px;
-}
-
-#data-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-#data-form label {
-  font-size: 18px;
-  text-align: left;
-}
-
-#data-form input {
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-#data-form button {
-  background-color: #2c6e49;
-  color: white;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-#data-form button:hover {
-  background-color: #1e5137;
-}
-
-/* Tab Navigation */
-.tab-container {
-  margin-top: 20px;
-}
-
-.tabs {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 20px;
-  list-style: none;
-  padding: 0;
-}
-
-.tabs li {
-  cursor: pointer;
-  padding: 10px 20px;
-  background-color: #f1f1f1;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-}
-
-.tabs li.active {
-  background-color: #2c6e49;
-  color: white;
-}
-
-.tab-content {
-  display: none;
-}
-
-.tab-content.active {
-  display: block;
-}
-
-.tab-content input {
-  width: 100%;
-  margin-top: 10px;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-
-/* Tabs CSS */
-.tab-container {
-  margin-top: 20px;
-  position: relative;
-}
-
-/* Hide the radio buttons */
-.tab-container input[type="radio"] {
-  display: none;
-}
-
-/* Tab labels */
-.tab-label {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #f1f1f1;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.tab-label:hover {
-  background-color: #e0e0e0;
-}
-
-/* Active tab label styling */
-#tab-1:checked ~ label[for="tab-1"],
-#tab-2:checked ~ label[for="tab-2"],
-#tab-3:checked ~ label[for="tab-3"] {
-  background-color: #2c6e49;
-  color: white;
-}
-
-/* Tab content areas */
-.tab-content {
-  display: none;
-  margin-top: 20px;
-}
-
-/* Show the tab content when the corresponding radio button is checked */
-#tab-1:checked ~ #content-tab-1,
-#tab-2:checked ~ #content-tab-2,
-#tab-3:checked ~ #content-tab-3 {
-  display: block;
-}
-
-/* Tab content inputs */
-.tab-content input {
-  width: 100%;
-  margin-top: 10px;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-
-
-.suggestions {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 30px;
+.recover{
+  text-align:right;
+  font-size:1rem;
+  margin-bottom:1rem;
 
 }
-
-.suggestions div {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 12px;
-  width: 45%;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+.recover a{
+  text-decoration:none;
+  color:rgb(28, 87, 53);
 }
-
-
-
-.lifestyle {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #eef6f6;
+.recover a:hover{
+  color:blue;
+  text-decoration:underline;
 }
-
-ul {
-  list-style-type: none;
-  text-align: left;
-  color: #1e1e1e;
+button{
+  font-size:1.1rem;
+  padding:8px 0;
+  border-radius:5px;
+  outline:none;
+  border:none;
+  width:100%;
+  background:rgb(38, 96, 74);
+  color:white;
+  cursor:pointer;
+  transition:0.9s;
 }
-
-ul li {
-  font-size: 18px;
-  margin-bottom: 10px;
+button:hover{
+  background:#07001f;
 }
-
-/* Footer */
-footer {
-  background-color: #2c6e49;
-  color: white;
-  text-align: center;
-  padding: 20px;
-  margin-top: 40px;
+.or{
+  font-size:1.1rem;
+  margin-top:0.5rem;
+  text-align:center;
 }
-
-footer p {
-  font-size: 16px;
+.icons{
+  text-align:center;
 }
-/* General styling for the form */
-#carbon-footprint-form {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
+.icons i{
+  color:rgb(38, 96, 74);
+  padding:0.8rem 1.5rem;
+  border-radius:10px;
+  font-size:1.5rem;
+  cursor:pointer;
+  border:2px solid #dfe9f5;
+  margin:0 15px;
+  transition:1s;
 }
-
-h3 {
-  font-size: 1.5em;
-  color: #333;
-  margin-bottom: 15px;
+.icons i:hover{
+  background:#07001f;
+  font-size:1.6rem;
+  border:2px solid rgb(38, 96, 74);
 }
-
-/* Label styling */
-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #555;
+.links{
+  display:flex;
+  justify-content:space-around;
+  padding:0 4rem;
+  margin-top:0.9rem;
+  font-weight:bold;
 }
-
-/* Input styling */
-input, select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
+#signUpButton, #signInButton{
+  color:rgb(38, 96, 74);
+  border:none;
+  background-color:transparent;
+  font-size:1rem;
+  font-weight:bold;
+}
+#signUpButton:hover, #signInButton:hover {
+  text-decoration:underline;
+  color:blue;
+} 
+.messageDiv{
+  background-color:hsl(327,90%,28%);
+  color:white;
+  padding:10px 20px;
+  margin:10px;
   border-radius: 5px;
-  font-size: 1em;
-}
+  font-size:1rem;
+  opacity:0;
+  animation:fadeOut 7s forwards;
 
-/* Submit button styling */
-button[type="submit"] {
-  width: 100%;
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1.1em;
-  transition: background-color 0.3s ease;
-}
-
-button[type="submit"]:hover {
-  background-color: #45a049;
-}
-
-/* Result section styling */
-#result {
-  margin-top: 20px;
-  padding: 20px;
-  background-color: #eef6f6;
-  border-left: 4px solid #4CAF50;
-  border-radius: 5px;
-}
-
-#result h3, #result h4 {
-  color: #333;
-  margin-bottom: 10px;
-}
-
-#result p {
-  font-size: 1.1em;
-  color: #666;
-}
-
-/* Responsive styling */
-@media (max-width: 768px) {
-  #carbon-footprint-form {
-    padding: 15px;
-  }
-
-  button[type="submit"] {
-    font-size: 1em;
-    padding: 8px 12px;
-  }
-
-  h3 {
-    font-size: 1.3em;
-  }
 }
