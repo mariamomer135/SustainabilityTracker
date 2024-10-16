@@ -1,27 +1,4 @@
 // Show the car section when the user clicks the button
-
-
-
-const signUpButton=document.getElementById('signUpButton');
-const signInButton=document.getElementById('signInButton');
-const signInForm=document.getElementById('signIn');
-const signUpForm=document.getElementById('signup');
-
-signUpButton.addEventListener('click',function(){
-    signInForm.style.display="none";
-    signUpForm.style.display="block";
-})
-signInButton.addEventListener('click', function(){
-    signInForm.style.display="block";
-    signUpForm.style.display="none";
-})
-
-
-
-
-
-
-
 document.getElementById('next-to-car').addEventListener('click', function() {
     toggleSections('date-section', 'car-section');
 });
@@ -35,6 +12,15 @@ document.getElementById('next-to-diet').addEventListener('click', function() {
 document.getElementById('next-to-energy').addEventListener('click', function() {
     toggleSections('diet-section', 'energy-section');
 });
+
+
+
+
+
+
+
+
+
 
 // Function to toggle section visibility
 function toggleSections(hideId, showId) {
@@ -189,3 +175,19 @@ function displayLifestyleAdvice(advice, link) {
     lifestyleElement.textContent = advice;
     lifestyleElement.insertAdjacentHTML('beforeend', `<br><a href="${link}" target="_blank">Learn more</a>`);
 }
+
+
+
+const signUpButton=document.getElementById('signUpButton');
+const signInButton=document.getElementById('signInButton');
+const signInForm=document.getElementById('signIn');
+const signUpForm=document.getElementById('signup');
+
+signUpButton.addEventListener('click',function(){
+    signInForm.style.display="none";
+    signUpForm.style.display="block";
+})
+signInButton.addEventListener('click', function(){
+    signInForm.style.display="block";
+    signUpForm.style.display="none";
+})
