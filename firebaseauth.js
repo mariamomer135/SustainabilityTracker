@@ -1,91 +1,87 @@
-
+// Import Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-import{getFirestore, setDoc, doc} from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js"
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
 
+// Firebase configuration
 const firebaseConfig = {
-   apiKey: "AIzaSyAqGYp2JLW3zgfNtcnHhtBJxHuBCJjJhm8",
-   authDomain: "sustainabilitylogin.firebaseapp.com",
-   projectId: "sustainabilitylogin",
-   storageBucket: "sustainabilitylogin.appspot.com",
-   messagingSenderId: "890836111581",
-   appId: "1:890836111581:web:fa0450b2dca2039e800b34"
+    apiKey: "AIzaSyAqGYp2JLW3zgfNtcnHhtBJxHuBCJjJhm8",
+    authDomain: "sustainabilitylogin.firebaseapp.com",
+    projectId: "sustainabilitylogin",
+    storageBucket: "sustainabilitylogin.appspot.com",
+    messagingSenderId: "890836111581",
+    appId: "1:890836111581:web:fa0450b2dca2039e800b34"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-function showMessage(message, divId){
-   var messageDiv=document.getElementById(divId);
-   messageDiv.style.display="block";
-   messageDiv.innerHTML=message;
-   messageDiv.style.opacity=1;
-   setTimeout(function(){
-       messageDiv.style.opacity=0;
-   },5000);
-}
-const signUp=document.getElementById('submitSignUp');
-signUp.addEventListener('click', (event)=>{
-   event.preventDefault();
-   const email=document.getElementById('rEmail').value;
-   const password=document.getElementById('rPassword').value;
-   const firstName=document.getElementById('fName').value;
-   const lastName=document.getElementById('lName').value;
+// Get references to buttons and forms
 
-   const auth=getAuth();
-   const db=getFirestore();
+const submitSignIn = document.getElementById('submitSignIn');
 
-   createUserWithEmailAndPassword(auth, email, password)
-   .then((userCredential)=>{
-       const user=userCredential.user;
-       const userData={
-           email: email,
-           firstName: firstName,
-           lastName:lastName
-       };
-       showMessage('Account Created Successfully', 'signUpMessage');
-       const docRef=doc(db, "users", user.uid);
-       setDoc(docRef,userData)
-       .then(()=>{
-           window.location.href='index.html';
-       })
-       .catch((error)=>{
-           console.error("error writing document", error);
+// Sign up functionality
 
-       });
-   })
-   .catch((error)=>{
-       const errorCode=error.code;
-       if(errorCode=='auth/email-already-in-use'){
-           showMessage('Email Address Already Exists !!!', 'signUpMessage');
-       }
-       else{
-           showMessage('unable to create User', 'signUpMessage');
-       }
-   })
+
+// Sign up functionality
+const submitSignUp = document.getElementById('submitSignUp');
+submitSignUp.addEventListener('click', (e) => {
+    e.preventDefault(); // Prevent form from submitting
+    alert("Sign Up Button Clicked!"); // Debugging alert
+
+    // Get user input values
+    const email = document.getElementById('rEmail').value;
+    const password = document.getElementById('rPassword').value;
+    const firstName = document.getElementById('fName').value;
+    const lastName = document.getElementById('lName').value;
+
+    // Check if values are not empty
+    if (!email || !password || !firstName || !lastName) {
+        alert("Please fill in all fields."); // Alert if fields are empty
+        return; // Stop the function if fields are empty
+    }
+
+    // Firebase sign-up logic
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed up successfully
+            const user = userCredential.user;
+            console.log('User signed up:', user);
+
+            // Optionally redirect to another page after signup
+            window.location.href = 'homepage.html'; // Redirect to homepage
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error('Error during sign-up:', errorCode, errorMessage);
+            alert(`Sign-up error: ${errorMessage}`); // Show error to the user
+        });
 });
 
-const signIn=document.getElementById('submitSignIn');
-signIn.addEventListener('click', (event)=>{
-   event.preventDefault();
-   const email=document.getElementById('email').value;
-   const password=document.getElementById('password').value;
-   const auth=getAuth();
 
-   signInWithEmailAndPassword(auth, email,password)
-   .then((userCredential)=>{
-       showMessage('login is successful', 'signInMessage');
-       const user=userCredential.user;
-       localStorage.setItem('loggedInUserId', user.uid);
-       window.location.href='homepage.html';
-   })
-   .catch((error)=>{
-       const errorCode=error.code;
-       if(errorCode==='auth/invalid-credential'){
-           showMessage('Incorrect Email or Password', 'signInMessage');
-       }
-       else{
-           showMessage('Account does not Exist', 'signInMessage');
-       }
-   })
-})
+
+// Sign in functionality
+submitSignIn.addEventListener('click', (e) => {
+    e.preventDefault(); // Prevent form from submitting
+
+    // Get user input values
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    // Firebase sign-in logic
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed in successfully
+            const user = userCredential.user;
+            console.log('User signed in:', user);
+
+            // Redirect to homepage after successful login
+            window.location.href = 'homepage.html';
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error('Error during sign-in:', errorCode, errorMessage);
+        });
+});
