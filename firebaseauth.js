@@ -1,6 +1,7 @@
 // Import Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -15,13 +16,10 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app); // Initialize Firestore
 
 // Get references to buttons and forms
-
 const submitSignIn = document.getElementById('submitSignIn');
-
-// Sign up functionality
-
 
 // Sign up functionality
 const submitSignUp = document.getElementById('submitSignUp');
@@ -48,8 +46,25 @@ submitSignUp.addEventListener('click', (e) => {
             const user = userCredential.user;
             console.log('User signed up:', user);
 
-            // Optionally redirect to another page after signup
-            window.location.href = 'homepage.html'; // Redirect to homepage
+            // Save additional user info in Firestore
+            const userRef = doc(db, "users", user.uid); // Reference to the user's document
+            const userData = {
+                email: email,
+                firstName: firstName,
+                lastName: lastName
+            };
+
+            // Set user data in Firestore
+            setDoc(userRef, userData)
+                .then(() => {
+                    console.log("User data saved in Firestore successfully!");
+                    // Redirect to homepage after signup
+                    window.location.href = 'homepage.html'; // Redirect to homepage
+                })
+                .catch((error) => {
+                    console.error("Error saving user data in Firestore:", error);
+                    alert("Error saving user data. Please try again.");
+                });
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -58,8 +73,6 @@ submitSignUp.addEventListener('click', (e) => {
             alert(`Sign-up error: ${errorMessage}`); // Show error to the user
         });
 });
-
-
 
 // Sign in functionality
 submitSignIn.addEventListener('click', (e) => {
@@ -83,5 +96,6 @@ submitSignIn.addEventListener('click', (e) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.error('Error during sign-in:', errorCode, errorMessage);
+            alert(`Sign-in error: ${errorMessage}`); // Show error to the user
         });
 });
