@@ -15,13 +15,6 @@ document.getElementById('next-to-energy').addEventListener('click', function() {
 
 
 
-
-
-
-
-
-
-
 // Function to toggle section visibility
 function toggleSections(hideId, showId) {
     document.getElementById(hideId).style.display = 'none';
@@ -175,6 +168,5 @@ function displayLifestyleAdvice(advice, link) {
     lifestyleElement.textContent = advice;
     lifestyleElement.insertAdjacentHTML('beforeend', `<br><a href="${link}" target="_blank">Learn more</a>`);
 }
-
 
 
