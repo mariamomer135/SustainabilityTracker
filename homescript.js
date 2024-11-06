@@ -1,3 +1,24 @@
+// Firebase imports
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyAqGYp2JLW3zgfNtcnHhtBJxHuBCJjJhm8",
+    authDomain: "sustainabilitylogin.firebaseapp.com",
+    projectId: "sustainabilitylogin",
+    storageBucket: "sustainabilitylogin.appspot.com",
+    messagingSenderId: "890836111581",
+    appId: "1:890836111581:web:fa0450b2dca2039e800b34"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore();
+
+
 // Show the car section when the user clicks the button
 document.getElementById('next-to-car').addEventListener('click', function() {
     toggleSections('date-section', 'car-section');
@@ -12,8 +33,6 @@ document.getElementById('next-to-diet').addEventListener('click', function() {
 document.getElementById('next-to-energy').addEventListener('click', function() {
     toggleSections('diet-section', 'energy-section');
 });
-
-
 
 // Function to toggle section visibility
 function toggleSections(hideId, showId) {
@@ -61,6 +80,9 @@ document.getElementById('carbon-footprint-form').addEventListener('submit', func
 
     // Display results
     displayResults(date, carEmissions, dietEmissions, energyEmissions, totalEmissions);
+
+    // Save emissions data to Firebase
+    saveEmissionsDataToFirebase(date, carEmissions, dietEmissions, energyEmissions, totalEmissions);
 
     // Show lifestyle advice
     const { advice, link } = generateLifestyleAdvice(carEmissions, dietEmissions, energyEmissions);
@@ -122,11 +144,39 @@ function calculateDietEmissions(fruit, fruitAmount, protein, proteinWeight, grai
 function calculateEnergyEmissions(energy, naturalGas, heatingOil, propane) {
     // Emission factors (kg CO2e)
     const energyEmissions = energy * 0.92;  // kWh to kg CO2e
-    const naturalGasEmissions = naturalGas * 1.89; // kg CO2e per therm
-    const heatingOilEmissions = heatingOil * 2.52; // kg CO2e per gallon
-    const propaneEmissions = propane * 1.56; // kg CO2e per gallon
+    const naturalGasEmissions = naturalGas * 1.89; // kg CO₂e per therm
+    const heatingOilEmissions = heatingOil * 2.52; // kg CO₂e per gallon
+    const propaneEmissions = propane * 1.56; // kg CO₂e per gallon
 
     return energyEmissions + naturalGasEmissions + heatingOilEmissions + propaneEmissions; // Total emissions from energy
+}
+
+// Function to save emissions data to Firebase
+function saveEmissionsDataToFirebase(date, carEmissions, dietEmissions, energyEmissions, totalEmissions) {
+    const userId = localStorage.getItem('loggedInUserId');
+    if (userId) {
+        const userRef = doc(db, 'users', userId); // Reference to the user's document in Firestore
+        const emissionsData = {
+            date: date,
+            carEmissions: carEmissions,
+            dietEmissions: dietEmissions,
+            energyEmissions: energyEmissions,
+            totalEmissions: totalEmissions
+        };
+
+        // Update the user's document with the new emissions data
+        setDoc(userRef, {
+            emissions: emissionsData
+        }, { merge: true }) // Merge allows you to add to the document without overwriting it
+        .then(() => {
+            console.log("Emissions data saved successfully!");
+        })
+        .catch((error) => {
+            console.error("Error saving emissions data:", error);
+        });
+    } else {
+        console.log("User not logged in.");
+    }
 }
 
 // Function to display results
@@ -144,29 +194,29 @@ function displayResults(date, carEmissions, dietEmissions, energyEmissions, tota
 
 // Function to generate lifestyle advice
 function generateLifestyleAdvice(carEmissions, dietEmissions, energyEmissions) {
-    let lifestyleAdvice = '';
-    let adviceLink = '';
+    let advice = "";
+    let link = "";
 
-    if (carEmissions > dietEmissions && carEmissions > energyEmissions) {
-        lifestyleAdvice = "Your car emissions are the greatest. Consider using public transport, carpooling, or switching to a more fuel-efficient vehicle.";
-        adviceLink = "https://ecology.wa.gov/issues-and-local-projects/education-training/what-you-can-do/reducing-car-pollution";
-    } else if (dietEmissions > carEmissions && dietEmissions > energyEmissions) {
-        lifestyleAdvice = "Your diet emissions are the greatest. Consider reducing meat consumption, eating more plant-based foods, and sourcing local produce.";
-        adviceLink = "https://ourworldindata.org/food-choice-vs-eating-local";
-    } else if (energyEmissions > carEmissions && energyEmissions > dietEmissions) {
-        lifestyleAdvice = "Your energy usage is the greatest. Try reducing your energy consumption by using energy-efficient appliances, turning off lights, and considering renewable energy sources.";
-        adviceLink = "https://www.nps.gov/pore/learn/nature/climatechange_action_home.htm";
+    if (carEmissions > 100) {
+        advice += "Consider reducing your driving or switching to a more efficient vehicle.";
+        link = "https://www.epa.gov/greenvehicles";
     }
 
-    return { advice: lifestyleAdvice, link: adviceLink }; // Return advice and link as an object
+    if (dietEmissions > 50) {
+        advice += " Try reducing your meat consumption or eating more plant-based foods.";
+        link = "https://www.peta.org/living/food/";
+    }
+
+    if (energyEmissions > 50) {
+        advice += " Consider using energy-efficient appliances or renewable energy sources.";
+        link = "https://www.energy.gov/energysaver/energy-efficient-home";
+    }
+
+    return { advice, link };
 }
 
 // Function to display lifestyle advice
 function displayLifestyleAdvice(advice, link) {
-    const lifestyleElement = document.querySelector('.lifestyle');
-    lifestyleElement.style.display = 'block';
-    lifestyleElement.textContent = advice;
-    lifestyleElement.insertAdjacentHTML('beforeend', `<br><a href="${link}" target="_blank">Learn more</a>`);
+    const lifestyleElement = document.getElementById('lifestyle-advice');
+    lifestyleElement.innerHTML = `<p>${advice}</p><a href="${link}" target="_blank">Learn more</a>`;
 }
-
-
