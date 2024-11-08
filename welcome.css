@@ -1,56 +1,87 @@
-/* styles.css */
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body, html {
-    height: 100%;
     font-family: Arial, sans-serif;
 }
 
-.welcome-screen {
+
+body {
+    background-image: url('sustain.jpg'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-image: url(sky.jpg);
-
-    color: #ffffff;
-    text-align: center;
+    color: #fff;
+    overflow: hidden;
+    
 }
 
-.content {
-    max-width: 600px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background for text readability */
+
+.welcome-container {
+    background: #333; 
+    padding: 40px;
     border-radius: 15px;
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 2s ease-in-out;
+    color: #fff; 
 }
 
-h1 {
+
+.welcome-container h1 {
     font-size: 2.5em;
     margin-bottom: 10px;
+    color: #c8e6c9; 
 }
 
-p {
+.welcome-container p {
     font-size: 1.2em;
     margin-bottom: 20px;
+    color: #e0f2f1; 
 }
 
-.start-button {
-    display: inline-block;
+.welcome-container button {
     padding: 12px 24px;
-    font-size: 1.2em;
-    color: #ffffff;
-    background-color: #4CAF50; /* Eco-friendly green button */
+    font-size: 1em;
+    font-weight: bold;
+    background-color: #4CAF50; 
+    color: #fff;
     border: none;
-    border-radius: 8px;
-    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-.start-button:hover {
-    background-color: #3e8e41;
+.welcome-container button:hover {
+    background-color: #388E3C; 
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .welcome-container h1 {
+        font-size: 2em;
+    }
+    .welcome-container p {
+        font-size: 1em;
+    }
+    .welcome-container button {
+        font-size: 0.9em;
+    }
 }
