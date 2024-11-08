@@ -28,7 +28,9 @@ document.getElementById('next-to-car').addEventListener('click', function() {
 document.getElementById('next-to-diet').addEventListener('click', function() {
     toggleSections('car-section', 'diet-section');
 });
-
+document.getElementById('add-fruit').addEventListener('click', function() {
+    addFruitField();
+});
 // Show the energy section when the user clicks the button
 document.getElementById('next-to-energy').addEventListener('click', function() {
     toggleSections('diet-section', 'energy-section');
@@ -75,6 +77,11 @@ document.getElementById('carbon-footprint-form').addEventListener('submit', func
     const dietEmissions = calculateDietEmissions(fruit, fruitAmount, protein, proteinWeight, grains, grainsWeight, dairy, dairyWeight);
     const energyEmissions = calculateEnergyEmissions(energyUsage, naturalGas, heatingOil, propane);
 
+    const idealCar = 8; // Ideal car emissions in kg
+    const idealDiet = 6; // Ideal diet emissions in kg
+    const idealEnergy = 9; // Ideal energy emissions in kg
+
+
     // Total emissions
     const totalEmissions = carEmissions + dietEmissions + energyEmissions;
 
@@ -87,7 +94,39 @@ document.getElementById('carbon-footprint-form').addEventListener('submit', func
     // Show lifestyle advice
     const { advice, link } = generateLifestyleAdvice(carEmissions, dietEmissions, energyEmissions);
     displayLifestyleAdvice(advice, link);
+
+
+    function displayResults(date, carEmissions, dietEmissions, energyEmissions, totalEmissions) {
+        document.getElementById('result-date').textContent = date;
+        document.getElementById('result-car').textContent = carEmissions.toFixed(2);
+        document.getElementById('result-diet').textContent = dietEmissions.toFixed(2);
+        document.getElementById('result-energy').textContent = energyEmissions.toFixed(2);
+        document.getElementById('result-total').textContent = totalEmissions.toFixed(2);
+    
+        // Hide the form and show the results
+        document.getElementById('carbon-footprint-form').style.display = 'none';
+        document.getElementById('result').style.display = 'block';
+    
+        // Display the emissions chart
+        displayComparisonEmissionsChart(carEmissions, dietEmissions, energyEmissions, idealCar, idealDiet, idealEnergy);
+    }
+    
+
+
+
+
+
+
+
+
+
+
+
 });
+
+
+
+
 
 // Function to calculate car emissions
 function calculateCarEmissions(distance, efficiency, type) {
@@ -151,6 +190,69 @@ function calculateEnergyEmissions(energy, naturalGas, heatingOil, propane) {
     return energyEmissions + naturalGasEmissions + heatingOilEmissions + propaneEmissions; // Total emissions from energy
 }
 
+function displayComparisonEmissionsChart(carEmissions, dietEmissions, energyEmissions, idealCar, idealDiet, idealEnergy) {
+    const ctx = document.getElementById('emissionsChart').getContext('2d');
+
+    const data = {
+        labels: ['Car', 'Diet', 'Energy'], // Categories for comparison
+        datasets: [
+            {
+                label: 'Actual Emissions',
+                data: [carEmissions, dietEmissions, energyEmissions], // Actual data values
+                backgroundColor: 'rgba(255, 99, 132, 0.6)', // Color for actual emissions bars
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'Ideal Emissions',
+                data: [idealCar, idealDiet, idealEnergy], // Ideal values
+                backgroundColor: 'rgba(54, 162, 235, 0.6)', // Color for ideal emissions bars
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }
+        ]
+    };
+
+    const options = {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true, // Start the Y-axis from 0 for better comparison
+                ticks: {
+                    stepSize: 10
+                }
+            }
+        }
+    };
+
+    new Chart(ctx, {
+        type: 'bar', // Use bar chart for comparison
+        data: data,
+        options: options
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Function to save emissions data to Firebase
 function saveEmissionsDataToFirebase(date, carEmissions, dietEmissions, energyEmissions, totalEmissions) {
     const userId = localStorage.getItem('loggedInUserId');
@@ -197,18 +299,14 @@ function generateLifestyleAdvice(carEmissions, dietEmissions, energyEmissions) {
     let advice = "";
     let link = "";
 
-    if (carEmissions > 100) {
-        advice += "Consider reducing your driving or switching to a more efficient vehicle.";
+    if (carEmissions >= dietEmissions && carEmissions >= energyEmissions) {
+        advice = "Consider reducing your driving or switching to a more efficient vehicle.";
         link = "https://www.epa.gov/greenvehicles";
-    }
-
-    if (dietEmissions > 50) {
-        advice += " Try reducing your meat consumption or eating more plant-based foods.";
+    } else if (dietEmissions >= carEmissions && dietEmissions >= energyEmissions) {
+        advice = "Try reducing your meat consumption or eating more plant-based foods.";
         link = "https://www.peta.org/living/food/";
-    }
-
-    if (energyEmissions > 50) {
-        advice += " Consider using energy-efficient appliances or renewable energy sources.";
+    } else if (energyEmissions >= carEmissions && energyEmissions >= dietEmissions) {
+        advice = "Consider using energy-efficient appliances or renewable energy sources.";
         link = "https://www.energy.gov/energysaver/energy-efficient-home";
     }
 
