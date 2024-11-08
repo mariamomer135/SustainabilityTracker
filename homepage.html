@@ -6,15 +6,18 @@
     <title>Sustainability Tracker</title>
     <link rel="stylesheet" href="homepage.css">
     <script type="module" src="firebaseauth.js"></script>
+   
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
     <header>
         <nav>
             <ul>
+               <li><a href="#dashboard">Dashboard</a></li>
+               <li><a href="#calculator">Calculator</a></li>
                 <li><a href="#about">About</a></li>
-                <li><a href="#dashboard">Dashboard</a></li>
-                <li><a href="#suggestions">Suggestions</a></li>
-                <li><a href="#contact">Contact Page</a></li>
+             
             </ul>
         </nav>
         <div class="heading" id="head">
@@ -31,25 +34,48 @@
         </div>
     </section>
 
-    <!-- Dashboard Section -->
-    <section id="dashboard" class="dashboard-section">
-        <h2>Your Dashboard</h2>
-        <div class="dashboard-options">
-            <!--  <a href="#weekly-report">View Weekly Emissions Report</a> -->
-            <a href="#progress">Carbon Emissions Progress</a>
-            <a href="#profile">Profile Management</a>
-            <a href="#tracker">Link to Habit Tracker</a>
-            <a href="#logout">Log Out</a>
+
+    <div id="dashboard">
+    <div class="dashboard-wrapper">
+<section id="dashboard" class="dashboard-section">
+    <div class="dashboard-heading"><h2>Your Dashboard</h2></div>
+    <div class="dashboard-content">
+
+        <!-- Carbon Emissions Progress Section -->
+        <div class="dashboard-section-item1">
+            <h3>Carbon Emissions Progress</h3>
+            <p>Track your emissions over time.</p>
+            <a href="#progress">View Progress</a>
         </div>
-    </section>
+
+        <!-- Profile Management Section -->
+        <div class="dashboard-section-item2">
+            <h3>Profile Management</h3>
+            <p>Manage your account and preferences.</p>
+            <a href="#profile">Edit Profile</a>
+        </div>
+
+        <!-- Habit Tracker Section -->
+        <div class="dashboard-section-item3">
+            <h3>Habit Tracker</h3>
+            <p>Monitor your daily sustainable habits.</p>
+            <a href="#tracker">Go to Habit Tracker</a>
+        </div>
+    </div>
+    </div>
+</section>
+</div>
+
 
     <!-- Data Entry and Chart Section -->
+</div>
+<div id="calculator">
     <section class="data-section">
         <h2>Input Your Data</h2>
         <form id="carbon-footprint-form">
             <!-- Date Entry -->
             <div id="date-section">
-                <h3>Enter Date</h3>
+                <h3>Carbon Emissions Calculator</h3>
                 <label for="date">Date:</label>
                 <input type="date" id="date" name="date" required>
                 <button type="button" id="next-to-car">Next</button>
@@ -59,7 +85,7 @@
 <!-- Car Emissions Section -->
 <div id="car-section" style="display:none;">
     <h3>Car Emissions</h3>
-    <input type="email" id="user-email" placeholder="Enter your email" required>
+   
     <label for="car-distance">Distance Driven (miles):</label>
     <input type="number" id="car-distance" name="car-distance" required>
 
@@ -163,7 +189,7 @@
                 
                 
          
-            </div>
+            
         
         
         </form>
@@ -184,7 +210,7 @@
         <p>Energy Emissions: <span id="result-energy"></span> kg CO2</p>
         <p><strong>Total Emissions:</strong> <span id="result-total"></span> kg CO2</p>
     </div>
-
+    <canvas id="emissionsChart" width="400" height="400"></canvas>
     <!-- Lifestyle Advice Section -->
     <div class="lifestyle" id="lifestyle-advice">
         <h4>Lifestyle Advice</h4>
@@ -193,6 +219,45 @@
 </div>
 
     </section>
+</div>
+
+<div id="about">
+<div class="about">
+    
+    <h2>Why track your emissions?</h2>
+    
+    <p>Tracking carbon emissions is essential to understanding our impact on the environment and taking meaningful steps to reduce it. 
+    Human activities like transportation, energy use, and food consumption contribute significantly to greenhouse gas emissions, which are accelerating climate change.
+     By monitoring emissions, individuals, businesses, and governments can identify areas where improvements can be made—whether it's reducing energy consumption, 
+     choosing more sustainable food options, or transitioning to cleaner forms of transportation.
+        
+    On a global scale, tracking emissions is vital for meeting climate goals and ensuring long-term environmental sustainability. It allows for informed decision-making, 
+    progress measurement, and the setting of realistic reduction targets. Ultimately, reducing emissions helps mitigate the negative effects of climate change, conserve resources, 
+    and create a healthier planet for future generations. Every effort to track and reduce carbon emissions brings us closer to a more sustainable and resilient world.</p></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     <footer>
