@@ -1,11 +1,33 @@
 // Import Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
 
 
+async function getEmissionsDataFromFirebase() {
+    const user = auth.currentUser; // Get the current authenticated user
+    if (user) {
+        const userRef = doc(db, 'users', user.uid); // Reference to the user's document
+        try {
+            const docSnap = await getDoc(userRef);
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                return data.emissions || [];
+            } else {
+                console.log("No such document!");
+                return [];
+            }
+        } catch (error) {
+            console.error("Error retrieving emissions data:", error);
+            return [];
+        }
+    } else {
+        console.log("User not logged in.");
+        return [];
+    }
+}
 
 
 
@@ -106,3 +128,5 @@ submitSignIn.addEventListener('click', (e) => {
         });
 });
 
+// Add this at the end of your firebaseauth.js file
+export { getEmissionsDataFromFirebase };

@@ -6,6 +6,8 @@
     <title>Sustainability Tracker</title>
     <link rel="stylesheet" href="homepage.css">
     <script type="module" src="firebaseauth.js"></script>
+    <script src="chartpop.js"></script>
+
    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -22,6 +24,7 @@
         </nav>
         <div class="heading" id="head">
             <h1>Sustainability Tracker</h1>
+            <p id="greeting">Hi, <span id="userFirstName"></span>!</p>
         </div>
     </header>
 
@@ -42,17 +45,46 @@
     <div class="dashboard-content">
 
         <!-- Carbon Emissions Progress Section -->
-        <div class="dashboard-section-item1">
-            <h3>Carbon Emissions Progress</h3>
-            <p>Track your emissions over time.</p>
-            <a href="#progress">View Progress</a>
-        </div>
+<!-- Carbon Emissions Progress Section -->
+<!-- Carbon Emissions Progress Section -->
+<!-- Carbon Emissions Progress Section -->
+<div class="dashboard-section-item1">
+    <h3>Carbon Emissions Progress</h3>
+    <p>Track your emissions over time.</p>
+    <a href="#progress">View Progess</a>
+    <!-- Chart container for displaying emissions -->
+</div>
 
+
+
+
+        <!-- Chart container (Initially hidden) -->
+ 
         <!-- Profile Management Section -->
         <div class="dashboard-section-item2">
             <h3>Profile Management</h3>
             <p>Manage your account and preferences.</p>
             <a href="#profile">Edit Profile</a>
+            <div id="profileModal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Edit Profile</h2>
+                    <form id="profileForm">
+                        <label for="profileFirstName">First Name:</label>
+                        <input type="text" id="profileFirstName" name="firstName" required>
+            
+                        <label for="profileLastName">Last Name:</label>
+                        <input type="text" id="profileLastName" name="lastName" required>
+            
+                        <label for="profileEmail">Email:</label>
+                        <input type="email" id="profileEmail" name="email" required disabled>
+            
+                        <!-- Add other fields as needed -->
+            
+                        <button type="button" id="saveProfile">Save Changes</button>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <!-- Habit Tracker Section -->
@@ -119,6 +151,7 @@
         <input type="number" id="fruit-amount" name="fruit-amount" required>
     </div>
     <button type="button" id="add-fruit">Add another fruit</button>
+    <div id="additional-fruits"></div>
 
     <div id="protein-container">
         <label for="protein">Protein:</label>
@@ -130,6 +163,7 @@
         </select>
         <label for="protein-weight">Protein Weight (kg):</label>
         <input type="number" id="protein-weight" name="protein-weight" required>
+        <div id="additional-protein"></div>
     </div>
     <button type="button" id="add-protein">Add another protein</button>
 
@@ -143,6 +177,7 @@
         <input type="number" id="grains-weight" name="grains-weight" required>
     </div>
     <button type="button" id="add-grain">Add another grain</button>
+    <div id="additional-grains"></div>
 
     <div id="dairy-container">
         <label for="dairy">Dairy:</label>
@@ -155,6 +190,7 @@
         <input type="number" id="dairy-weight" name="dairy-weight" required>
     </div>
     <button type="button" id="add-dairy">Add another dairy</button>
+    <div id="additional-dairy"></div>
 
     <button type="button" id="next-to-energy">Next</button>
 </div>
@@ -264,6 +300,7 @@
         <p>&copy; 2024 Sustainability Tracker. All Rights Reserved.</p>
     </footer>
     <script type="module" src="homescript.js"></script>
+
     <script type="module" src="./homepage.js"></script>
 </body>
 </html>

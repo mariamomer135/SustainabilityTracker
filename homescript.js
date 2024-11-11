@@ -1,7 +1,7 @@
 // Firebase imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut,updateEmail } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -41,6 +41,47 @@ function toggleSections(hideId, showId) {
     document.getElementById(hideId).style.display = 'none';
     document.getElementById(showId).style.display = 'block';
 }
+
+
+
+function displayGreeting() {
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const userDocRef = doc(db, "users", user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+            if (userDocSnap.exists()) {
+                const firstName = userDocSnap.data().firstName;
+                document.getElementById("userFirstName").textContent = firstName;
+            } else {
+                console.log("No such document!");
+            }
+        } else {
+            console.log("User is not signed in.");
+        }
+    });
+}
+
+// Call the function when the page loads
+window.onload = displayGreeting;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Handle the carbon footprint form submission
 document.getElementById('carbon-footprint-form').addEventListener('submit', function(event) {
@@ -125,6 +166,67 @@ document.getElementById('carbon-footprint-form').addEventListener('submit', func
 });
 
 
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById('add-fruit').addEventListener('click', () => {
+        const additionalFruits = document.getElementById('additional-fruits');
+        const newFruit = document.createElement('div');
+        newFruit.className = 'fruit-entry';
+        newFruit.innerHTML = `
+            <select class="fruit">
+                <option value="apple">Apple</option>
+                <option value="banana">Banana</option>
+                <option value="orange">Orange</option>
+            </select>
+            <input type="number" class="fruit-amount" placeholder="Amount (kg)">
+        `;
+        additionalFruits.appendChild(newFruit);
+    });
+
+    document.getElementById('add-protein').addEventListener('click', () => {
+        const additionalProtein = document.getElementById('additional-protein');
+        const newProtein = document.createElement('div');
+        newProtein.className = 'protein-entry';
+        newProtein.innerHTML = `
+            <select class="protein">
+                <option value="beef">Beef</option>
+                <option value="poultry">Poultry</option>
+                <option value="fish">Fish</option>
+                <option value="pork">Pork</option>
+            </select>
+            <input type="number" class="protein-weight" placeholder="Amount (kg)">
+        `;
+        additionalProtein.appendChild(newProtein);
+    });
+
+    document.getElementById('add-grain').addEventListener('click', () => {
+        const additionalGrains = document.getElementById('additional-grains');
+        const newGrain = document.createElement('div');
+        newGrain.className = 'grain-entry';
+        newGrain.innerHTML = `
+            <select class="grains">
+                <option value="rice">Rice</option>
+                <option value="oats">Oats</option>
+            </select>
+            <input type="number" class="grains-weight" placeholder="Amount (kg)">
+        `;
+        additionalGrains.appendChild(newGrain);
+    });
+
+    document.getElementById('add-dairy').addEventListener('click', () => {
+        const additionalDairy = document.getElementById('additional-dairy');
+        const newDairy = document.createElement('div');
+        newDairy.className = 'dairy-entry';
+        newDairy.innerHTML = `
+            <select class="dairy">
+                <option value="milk">Milk</option>
+                <option value="yogurt">Yogurt</option>
+                <option value="cheese">Cheese</option>
+            </select>
+            <input type="number" class="dairy-weight" placeholder="Amount (kg)">
+        `;
+        additionalDairy.appendChild(newDairy);
+    });
+});
 
 
 
@@ -254,10 +356,14 @@ function displayComparisonEmissionsChart(carEmissions, dietEmissions, energyEmis
 
 
 // Function to save emissions data to Firebase
+// Function to save emissions data to Firebase
+
+
 function saveEmissionsDataToFirebase(date, carEmissions, dietEmissions, energyEmissions, totalEmissions) {
-    const userId = localStorage.getItem('loggedInUserId');
-    if (userId) {
-        const userRef = doc(db, 'users', userId); // Reference to the user's document in Firestore
+    const user = auth.currentUser; // Get the current authenticated user
+    if (user) {
+        const userRef = doc(db, 'users', user.uid); // Reference to the user's document
+        
         const emissionsData = {
             date: date,
             carEmissions: carEmissions,
@@ -266,20 +372,23 @@ function saveEmissionsDataToFirebase(date, carEmissions, dietEmissions, energyEm
             totalEmissions: totalEmissions
         };
 
-        // Update the user's document with the new emissions data
-        setDoc(userRef, {
-            emissions: emissionsData
-        }, { merge: true }) // Merge allows you to add to the document without overwriting it
+        // Update the user's document by adding the new emission data to the emissions array
+        updateDoc(userRef, {
+            emissions: arrayUnion(emissionsData) // Ensure that the array is updated correctly
+        })
         .then(() => {
-            console.log("Emissions data saved successfully!");
+            console.log("Emissions data added successfully!");
         })
         .catch((error) => {
-            console.error("Error saving emissions data:", error);
+            console.error("Error adding emissions data:", error);
         });
     } else {
         console.log("User not logged in.");
     }
 }
+
+
+
 
 // Function to display results
 function displayResults(date, carEmissions, dietEmissions, energyEmissions, totalEmissions) {
@@ -304,10 +413,10 @@ function generateLifestyleAdvice(carEmissions, dietEmissions, energyEmissions) {
         link = "https://www.epa.gov/greenvehicles";
     } else if (dietEmissions >= carEmissions && dietEmissions >= energyEmissions) {
         advice = "Try reducing your meat consumption or eating more plant-based foods.";
-        link = "https://www.peta.org/living/food/";
+        link = "https://www.wwf.org.uk/betterbasket";
     } else if (energyEmissions >= carEmissions && energyEmissions >= dietEmissions) {
         advice = "Consider using energy-efficient appliances or renewable energy sources.";
-        link = "https://www.energy.gov/energysaver/energy-efficient-home";
+        link = "https://scied.ucar.edu/learning-zone/climate-solutions/reduce-greenhouse-gases";
     }
 
     return { advice, link };
@@ -318,3 +427,68 @@ function displayLifestyleAdvice(advice, link) {
     const lifestyleElement = document.getElementById('lifestyle-advice');
     lifestyleElement.innerHTML = `<p>${advice}</p><a href="${link}" target="_blank">Learn more</a>`;
 }
+
+// Get modal and elements
+const profileModal = document.getElementById('profileModal');
+const editProfileLink = document.querySelector('.dashboard-section-item2 a');
+const closeModal = document.querySelector('.close');
+
+// Open modal when "Edit Profile" is clicked
+editProfileLink.addEventListener('click', async (e) => {
+    e.preventDefault();
+    profileModal.style.display = 'block';
+
+    // Load current user info
+    const user = auth.currentUser;
+    if (user) {
+        // Fetch data from Firestore
+        const userRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(userRef);
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            document.getElementById('profileFirstName').value = data.firstName;
+            document.getElementById('profileLastName').value = data.lastName;
+            document.getElementById('profileEmail').value = user.email; // get email from auth user
+        }
+    }
+});
+
+// Close modal
+closeModal.addEventListener('click', () => {
+    profileModal.style.display = 'none';
+});
+
+// Save changes to Firestore and update email
+document.getElementById('saveProfile').addEventListener('click', async () => {
+    const firstName = document.getElementById('profileFirstName').value;
+    const lastName = document.getElementById('profileLastName').value;
+    const email = document.getElementById('profileEmail').value;
+
+    const user = auth.currentUser;
+
+    try {
+        // Update profile fields in Firestore
+        if (user) {
+            const userRef = doc(db, "users", user.uid);
+            await updateDoc(userRef, {
+                firstName: firstName,
+                lastName: lastName
+            });
+
+            // Update email in Firebase Auth if it has changed
+            if (email !== user.email) {
+                await updateEmail(user, email);  // Requires user to have recently signed in
+            }
+
+            // Update local storage if using it for greeting
+            localStorage.setItem('firstName', firstName);
+
+            alert('Profile updated successfully!');
+            profileModal.style.display = 'none';
+        }
+    } catch (error) {
+        console.error("Error updating profile: ", error);
+        alert(`Failed to update profile: ${error.message}`);
+    }
+});
+
