@@ -74,9 +74,132 @@ window.onload = displayGreeting;
 
 
 
+async function fetchProgressData() {
+    const user = auth.currentUser;
+    if (!user) {
+        console.log("User is not logged in.");
+        return [];
+    }
+
+    try {
+        const userRef = doc(db, 'users', user.uid);
+        const userDoc = await getDoc(userRef);
+
+        if (!userDoc.exists()) {
+            console.log("User document does not exist.");
+            return [];
+        }
+
+        const userData = userDoc.data();
+        if (!userData.emissions || !Array.isArray(userData.emissions)) {
+            console.log("No emissions data available.");
+            return [];
+        }
+
+        // Return the array of emissions data
+        return userData.emissions.map(item => ({
+            date: item.date,
+            carEmissions: item.carEmissions || 0,
+            dietEmissions: item.dietEmissions || 0,
+            energyEmissions: item.energyEmissions || 0,
+        }));
+    } catch (error) {
+        console.error("Error fetching progress data:", error);
+        return [];
+    }
+}
+
+async function getChartData() {
+    const progressData = await fetchProgressData();
+
+    // Extract labels (dates) and datasets (emission types)
+    const labels = progressData.map(item => item.date);
+    const carData = progressData.map(item => item.carEmissions);
+    const dietData = progressData.map(item => item.dietEmissions);
+    const energyData = progressData.map(item => item.energyEmissions);
+
+    return { labels, carData, dietData, energyData };
+}
 
 
+// Display the line chart
+function displayLineChart(labels, carData, dietData, energyData) {
+    const ctx = document.getElementById('myChart').getContext('2d');
+    
+    if (!ctx) {
+        console.error('Canvas element not found.');
+        return;
+    }
 
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Car Emissions (kg CO₂)',
+                    data: carData,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    fill: false,
+                    tension: 0.1
+                },
+                {
+                    label: 'Diet Emissions (kg CO₂)',
+                    data: dietData,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    fill: false,
+                    tension: 0.1
+                },
+                {
+                    label: 'Energy Emissions (kg CO₂)',
+                    data: energyData,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    fill: false,
+                    tension: 0.1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+// Get modal elements
+// Modal Elements
+const modal = document.getElementById('progressModal');
+const viewProgressBtn = document.getElementById('view-progress-btn');
+const closeBtn = document.querySelector('.close');
+
+// Event Listener for View Progress Button
+viewProgressBtn.addEventListener('click', async () => {
+    const { labels, carData, dietData, energyData } = await getChartData();
+
+    if (labels.length > 0) {
+        // Render the chart
+        displayLineChart(labels, carData, dietData, energyData);
+        // Show the modal
+        modal.style.display = 'block';
+    } else {
+        alert("No progress data available.");
+    }
+});
+
+// Close modal when 'x' is clicked
+closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+// Close modal when clicking outside of modal content
+window.addEventListener('click', (event) => {
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+});
 
 
 
@@ -108,10 +231,7 @@ document.getElementById('carbon-footprint-form').addEventListener('submit', func
     const dairyWeight = parseFloat(document.getElementById('dairy-weight').value);
 
     // Validate inputs
-    if (isNaN(carDistance) || isNaN(fuelEfficiency) || carDistance <= 0 || fuelEfficiency <= 0) {
-        alert("Please enter valid values for distance and fuel efficiency.");
-        return;
-    }
+  
 
     // Calculate emissions
     const carEmissions = calculateCarEmissions(carDistance, fuelEfficiency, carType);
@@ -292,6 +412,18 @@ function calculateEnergyEmissions(energy, naturalGas, heatingOil, propane) {
     return energyEmissions + naturalGasEmissions + heatingOilEmissions + propaneEmissions; // Total emissions from energy
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 function displayComparisonEmissionsChart(carEmissions, dietEmissions, energyEmissions, idealCar, idealDiet, idealEnergy) {
     const ctx = document.getElementById('emissionsChart').getContext('2d');
 
@@ -327,10 +459,19 @@ function displayComparisonEmissionsChart(carEmissions, dietEmissions, energyEmis
         }
     };
 
-    new Chart(ctx, {
+    // Store the chart instance in a variable
+    const myChart = new Chart(ctx, {
         type: 'bar', // Use bar chart for comparison
         data: data,
         options: options
+    });
+
+    // Add event listener for "Copy Link" button
+    document.getElementById('copyLinkBtn').addEventListener('click', function () {
+        const chartImageURL = myChart.toBase64Image(); // Get the image URL
+        navigator.clipboard.writeText(chartImageURL) // Copy to clipboard
+            .then(() => alert('Chart link copied to clipboard!'))
+            .catch(err => alert('Failed to copy the link.'));
     });
 }
 
@@ -422,26 +563,46 @@ function generateLifestyleAdvice(carEmissions, dietEmissions, energyEmissions) {
     return { advice, link };
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Function to display lifestyle advice
 function displayLifestyleAdvice(advice, link) {
     const lifestyleElement = document.getElementById('lifestyle-advice');
     lifestyleElement.innerHTML = `<p>${advice}</p><a href="${link}" target="_blank">Learn more</a>`;
 }
 
-// Get modal and elements
 const profileModal = document.getElementById('profileModal');
-const editProfileLink = document.querySelector('.dashboard-section-item2 a');
+const editProfileLink = document.getElementById('editProfileLink');
 const closeModal = document.querySelector('.close');
 
 // Open modal when "Edit Profile" is clicked
 editProfileLink.addEventListener('click', async (e) => {
-    e.preventDefault();
-    profileModal.style.display = 'block';
+    e.preventDefault();  // Prevent default anchor behavior
+    console.log("Edit Profile clicked");
+    profileModal.style.display = 'block';  // Show the modal
 
-    // Load current user info
+    // Load current user info (example with Firebase auth and Firestore)
     const user = auth.currentUser;
     if (user) {
-        // Fetch data from Firestore
+        // Fetch data from Firestore (example code)
         const userRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(userRef);
         if (docSnap.exists()) {
@@ -453,10 +614,21 @@ editProfileLink.addEventListener('click', async (e) => {
     }
 });
 
-// Close modal
+// Close modal when 'x' (close button) is clicked
 closeModal.addEventListener('click', () => {
-    profileModal.style.display = 'none';
+    console.log("Close button clicked");
+    profileModal.style.display = 'none';  // Hide the modal
 });
+
+// Close modal when clicking outside of the modal content
+window.addEventListener('click', (event) => {
+    if (event.target === profileModal) {
+        console.log("Clicked outside modal, closing...");
+        profileModal.style.display = 'none';  // Hide the modal if clicked outside
+    }
+});
+
+
 
 // Save changes to Firestore and update email
 document.getElementById('saveProfile').addEventListener('click', async () => {
