@@ -124,3 +124,4 @@ function calculateDietEmissions(fruit, fruitAmount, protein, proteinWeight, grai
 
     return dietEmissions;
 }
+

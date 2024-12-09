@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sustainability Tracker</title>
     <link rel="stylesheet" href="homepage.css">
-    <script type="module" src="firebaseauth.js"></script>
-    <script src="chartpop.js"></script>
-
-   
+    <script src="firebaseauth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-firestore.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
@@ -44,27 +43,30 @@
     <div class="dashboard-heading"><h2>Your Dashboard</h2></div>
     <div class="dashboard-content">
 
-        <!-- Carbon Emissions Progress Section -->
 <!-- Carbon Emissions Progress Section -->
-<!-- Carbon Emissions Progress Section -->
-<!-- Carbon Emissions Progress Section -->
+
 <div class="dashboard-section-item1">
     <h3>Carbon Emissions Progress</h3>
     <p>Track your emissions over time.</p>
-    <a href="#progress">View Progess</a>
-    <!-- Chart container for displaying emissions -->
+    <button id="view-progress-btn">View Progress</button>
+</div>
+
+<!-- Modal for Progress Chart -->
+<div id="progressModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Carbon Emissions Progress</h3>
+        <canvas id="myChart" width="400" height="200"></canvas>
+    </div>
 </div>
 
 
-
-
-        <!-- Chart container (Initially hidden) -->
  
         <!-- Profile Management Section -->
         <div class="dashboard-section-item2">
             <h3>Profile Management</h3>
             <p>Manage your account and preferences.</p>
-            <a href="#profile">Edit Profile</a>
+            <a href="#profile" id="editProfileLink">Edit Profile</a>
             <div id="profileModal" class="modal" style="display:none;">
                 <div class="modal-content">
                     <span class="close">&times;</span>
@@ -72,26 +74,26 @@
                     <form id="profileForm">
                         <label for="profileFirstName">First Name:</label>
                         <input type="text" id="profileFirstName" name="firstName" required>
-            
+                
                         <label for="profileLastName">Last Name:</label>
                         <input type="text" id="profileLastName" name="lastName" required>
-            
+                
                         <label for="profileEmail">Email:</label>
                         <input type="email" id="profileEmail" name="email" required disabled>
-            
+                
                         <!-- Add other fields as needed -->
-            
+                
                         <button type="button" id="saveProfile">Save Changes</button>
                     </form>
                 </div>
             </div>
         </div>
-
+        
         <!-- Habit Tracker Section -->
         <div class="dashboard-section-item3">
             <h3>Habit Tracker</h3>
             <p>Monitor your daily sustainable habits.</p>
-            <a href="#tracker">Go to Habit Tracker</a>
+            <a href="https://www.habitu.app/">Go to Habit Tracker</a>
         </div>
     </div>
     </div>
@@ -213,20 +215,6 @@
                 <button type="submit" id="submit-form">Submit</button>
 
             </div> 
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-         
-            
-        
         
         </form>
 
@@ -247,6 +235,7 @@
         <p><strong>Total Emissions:</strong> <span id="result-total"></span> kg CO2</p>
     </div>
     <canvas id="emissionsChart" width="400" height="400"></canvas>
+    <button id="copyLinkBtn">Copy Chart Link</button>
     <!-- Lifestyle Advice Section -->
     <div class="lifestyle" id="lifestyle-advice">
         <h4>Lifestyle Advice</h4>
